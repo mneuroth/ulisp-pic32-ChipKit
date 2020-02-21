@@ -133,11 +133,15 @@ typedef int PinMode;
 
 #if defined(ARDUINO_ARCH_PIC32)
 
+typedef int BitOrder;
+
 #if defined(_BOARD_PICO_HOMECOMPUTER_)
 #define PSTR(s) s
 #define PROGMEM
 #define WORKSPACESIZE 3072-SDSIZE       /* Cells (8*bytes) */
 #define SYMBOLTABLESIZE 512             /* Bytes */
+#define CODESIZE 128                    /* Bytes */
+#define STACKDIFF 320
 #define SDCARD_SS_PIN 9                 /* RB7 == SELECT_SD_CARD */
 #endif
 
@@ -4028,15 +4032,17 @@ void testescape () {
 
 // Main evaluator
 
-extern uint32_t end;  // Bottom of stack
+//extern uint32_t end;  // Bottom of stack
+uint8_t End;
 
 object *eval (object *form, object *env) {
-  register int *sp asm ("r13");
+  //register int *sp asm ("r13");
   int TC=0;
   EVAL:
   // Enough space?
   // Serial.println((uint32_t)sp);
-  if (((uint32_t)sp - (uint32_t)&end) < STACKDIFF) error2(0, PSTR("Stack overflow"));
+  //if (((uint32_t)sp - (uint32_t)&end) < STACKDIFF) error2(0, PSTR("Stack overflow"));
+  if (End != 0xA5) error2(0, PSTR("Stack overflow"));  
   if (Freespace <= WORKSPACESIZE>>4) gc(form, env);
   // Escape
   if (tstflag(ESCAPE)) { clrflag(ESCAPE); error2(0, PSTR("Escape!"));}
@@ -4622,6 +4628,7 @@ void repl (object *env) {
 }
 
 void loop () {
+  End = 0xA5;      // Canary to check stack
   if (!setjmp(exception)) {
     #if defined(resetautorun)
     volatile int autorun = 12; // Fudge to keep code size the same

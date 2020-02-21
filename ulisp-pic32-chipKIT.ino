@@ -4567,6 +4567,17 @@ void initenv () {
   tee = symbol(TEE);
 }
 
+#define LED_PIN 0
+
+int blink_id;
+unsigned long blink_var;
+
+// see: https://chipkit.net/wiki/index.php?title=Task_Manager
+void blink_task(int id, void * tptr) 
+{
+   digitalWrite(LED_PIN, !digitalRead(LED_PIN)); // Toggle pin state
+}
+
 void setup () {
   Serial.begin(9600);
   int start = millis();
@@ -4574,6 +4585,11 @@ void setup () {
   initworkspace();
   initenv();
   initsleep();
+
+  // setup task for blinking LED
+  pinMode(LED_PIN, OUTPUT);
+  blink_id = createTask(blink_task, 500, TASK_ENABLE, &blink_var);  
+   
   pfstring(PSTR("uLisp 3.1 "), pserial); pln(pserial);
 }
 

@@ -1,11 +1,8 @@
-# ulisp-arm
-A version of the Lisp programming language for boards based on the ARM processor:
+# ulisp-pic32-chipKIT
+A version of the Lisp programming language for boards based on the PIC32 processor using [chipKIT](http://chipkit.net/):
 
-* Arduino Zero and MKRZero.
-* Adafruit ItsyBitsy M0, Feather M0, and Gemma M0.
-* Adafruit Metro M4, ItsyBitsy M4, Feather M4, and Grand Central M4.
-* Adafruit CLUE and ItsyBitsy nRF52840.
-* BBC Micro Bit.
-* Maxim MAX32620FTHR.
+* PicoHomeComputer
+* chipKIT uC32
+* many more boards can be found [here](https://chipkit.net/wiki/index.php?title=Boards)
 
 For more information see: http://www.ulisp.com/

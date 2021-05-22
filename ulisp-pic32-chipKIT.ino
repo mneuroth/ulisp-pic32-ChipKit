@@ -4034,7 +4034,7 @@ object *fn_analogread (object *args, object *env) {
 object *fn_analogreference (object *args, object *env) {
   (void) env;
   object *arg = first(args);
-  #if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41) || defined(MAX32620) || defined(ARDUINO_RASPBERRY_PI_PICO)
+  #if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41) || defined(MAX32620) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(_BOARD_PICO_HOMECOMPUTER_)
   error2(ANALOGREFERENCE, PSTR("not supported"));
   #else
   analogReference((eAnalogReference)checkkeyword(ANALOGREFERENCE, arg));
@@ -4045,7 +4045,11 @@ object *fn_analogreference (object *args, object *env) {
 object *fn_analogreadresolution (object *args, object *env) {
   (void) env;
   object *arg = first(args);
+  #if defined(ARDUINO_TEENSY40) || defined(ARDUINO_TEENSY41) || defined(MAX32620) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(_BOARD_PICO_HOMECOMPUTER_)
+  error2(ANALOGREFERENCE, PSTR("not supported"));
+  #else
   analogReadResolution(checkinteger(ANALOGREADRESOLUTION, arg));
+  #endif
   return arg;
 }
  
@@ -5166,7 +5170,7 @@ void testescape () {
 #endif
 
 extern uint32_t ENDSTACK;  // Bottom of stack
-//uint8_t End;
+uint8_t End;
 
 object *eval (object *form, object *env) {
   //register int *sp asm ("r13");
@@ -5184,7 +5188,7 @@ object *eval (object *form, object *env) {
 //  if (Freespace <= WORKSPACESIZE>>4) gc(form, env);
     
   // Serial.println((uint32_t)sp - (uint32_t)&ENDSTACK); // Find best STACKDIFF value
-  if (((uint32_t)sp - (uint32_t)&ENDSTACK) < STACKDIFF) error2(0, PSTR("stack overflow"));
+  //PATCH: if (((uint32_t)sp - (uint32_t)&End) < STACKDIFF) error2(0, PSTR("stack overflow"));
   if (Freespace <= WORKSPACESIZE>>4) gc(form, env);      // GC when 1/16 of workspace left
     
   // Escape

@@ -4786,10 +4786,12 @@ const char string217[] PROGMEM = ":input-pulldown";
 const char string218[] PROGMEM = ":output";
 const char string219[] PROGMEM = "";
 #endif
+const char string240[] PROGMEM = "";
 
 // Insert your own function names here
 
 // Built-in symbol lookup table
+// Third parameter is no. of arguments; 1st hex digit is min, 2nd hex digit is max, 0xF is unlimited
 const tbl_entry_t lookup_table[] PROGMEM = {
   { string0, NULL, 0x00 },
   { string1, NULL, 0x00 },
@@ -5090,6 +5092,7 @@ const tbl_entry_t lookup_table[] PROGMEM = {
   { string218, (fn_ptr_type)OUTPUT, PINMODE },
   { string219, NULL, 0x00 },
 #endif
+  { string240, NULL, 0x00 },
 
 // Insert your own table entries here
 
